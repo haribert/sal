@@ -38,15 +38,16 @@ class MachineModelsBar(IPlugin):
         # Eventually this situation will be corrected by using a cached
         # lookup table.
         model_conversion = {
-            machine.machine_model: machine.machine_model_friendly
-            for machine in machines if machine.machine_model_friendly}
+            machine['machine_model']: machine['machine_model_friendly']
+            for machine in machines.values('machine_model', 'machine_model_friendly') if machine['machine_model_friendly']}
         machine_models = Counter()
-        for machine in machines:
-            if machine.machine_model_friendly:
-                machine_model_friendly = machine.machine_model_friendly
+        for machine in machines.values('machine_model', 'machine_model_friendly'):
+            print machine
+            if machine['machine_model_friendly']:
+                machine_model_friendly = machine['machine_model_friendly']
             else:
                 machine_model_friendly = model_conversion.get(
-                    machine.machine_model, machine.machine_model)
+                    machine['machine_model'], machine['machine_model'])
             machine_models[machine_model_friendly] += 1
 
         data = [{"label": model, "value": machine_models[model]}
