@@ -493,6 +493,7 @@ def tableajax(request, pluginName, data, page='front', theID=None):
 def machine_list(request, pluginName, data, page='front', theID=None):
     (machines, title) = plugin_machines(request, pluginName, data, page, theID, get_machines=False)
     user = request.user
+    machines = machines.values('id','hostname', 'console_user', 'last_checkin')
     c = {'user':user, 'plugin_name': pluginName, 'machines': machines, 'req_type': page, 'title': title, 'bu_id': theID, 'request':request, 'data':data }
 
     return render(request, 'server/overview_list_all.html', c)
